@@ -1,2 +1,2 @@
-# Library-project-backend
-A project for Kodilla java developer course
+# Library Project backend
+A backend side for a project for Kodilla java developer course
