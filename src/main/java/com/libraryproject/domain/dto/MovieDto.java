@@ -12,4 +12,5 @@ public class MovieDto {
     private String title;
     private String director;
     private int releaseYear;
+    private int numberOfAvailableCopies;
 }

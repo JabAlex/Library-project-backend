@@ -1,5 +1,6 @@
 package com.libraryproject.controller;
 
+import com.libraryproject.domain.dto.BookCopyDto;
 import com.libraryproject.domain.dto.BookDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -16,27 +17,26 @@ public class BooksController {
 
     @GetMapping
     public ResponseEntity<List<BookDto>> getBooks(){
-        List<BookDto> books = List.of(new BookDto(2L, "test", "test", 1998),
-                new BookDto(1L, "test2", "test2", 2020));
+        List<BookDto> books = List.of(new BookDto(2L, "test", "test", 1998, 2),
+                new BookDto(1L, "test2", "test2", 2020, 3));
         return ResponseEntity.ok(books);
     }
     @GetMapping(value = "{bookId}")
     public ResponseEntity<BookDto> getBook(@PathVariable Long bookId){
-        return ResponseEntity.ok(new BookDto(1L,"test","test",2002));
+        return ResponseEntity.ok(new BookDto(1L,"test","test",2002, 1));
     }
     @GetMapping("/top-month")
     public ResponseEntity<List<BookDto>> getTopBooks(){
-        List<BookDto> topBooks = List.of(new BookDto(1L, "popular book1", "guy", 2002),
-                new BookDto(2L, "popular book2", "author", 2012));
+        List<BookDto> topBooks = List.of(new BookDto(1L, "popular book1", "guy", 2002, 3),
+                new BookDto(2L, "popular book2", "author", 2012, 4));
         return ResponseEntity.ok(topBooks);
     }
-    @GetMapping(value = "/copies/quantity/{bookId}")
-    public ResponseEntity<Integer> getNumberOfAvailableCopies(@PathVariable Long bookId){
-        return ResponseEntity.ok(3);
-    }
-    @GetMapping(value = "/copies/status/{bookCopyId}")
-    public ResponseEntity<String> getCopyStatus(@PathVariable Long bookCopyId){
-        return ResponseEntity.ok("Available");
+
+    @GetMapping(value = "/copies/{bookId}")
+    public ResponseEntity<List<BookCopyDto>> getListOfCopies(@PathVariable Long bookId){
+        List<BookCopyDto> bookCopies = List.of(new BookCopyDto(1L, 1L, "Rented"),
+                new BookCopyDto(2L, 1L, "Available"));
+        return ResponseEntity.ok(bookCopies);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

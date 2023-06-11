@@ -12,4 +12,5 @@ public class BookDto {
     private String title;
     private String author;
     private int releaseYear;
+    private int numberOfAvailableCopies;
 }
