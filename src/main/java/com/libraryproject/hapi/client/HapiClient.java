@@ -32,6 +32,7 @@ public class HapiClient {
     }
 
     public String getBookDescription(String bookName) throws IOException, InterruptedException {
+        bookName = sanitizeBookName(bookName);
         String bookId = getBookId(bookName);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://hapi-books.p.rapidapi.com/book/" + bookId))
@@ -52,5 +53,8 @@ public class HapiClient {
     private HapiResponseByIdDto convertToHapiResponseByIdDto(String response){
         Gson gson = new Gson();
         return gson.fromJson(response, new TypeToken<HapiResponseByIdDto>(){}.getType());
+    }
+    private String sanitizeBookName(String bookName){
+        return bookName.toLowerCase().replace(" ", "-");
     }
 }

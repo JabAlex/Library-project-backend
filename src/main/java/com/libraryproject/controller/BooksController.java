@@ -2,6 +2,9 @@ package com.libraryproject.controller;
 
 import com.libraryproject.domain.dto.BookCopyDto;
 import com.libraryproject.domain.dto.BookDto;
+import com.libraryproject.domain.dto.DetailedBookDto;
+import com.libraryproject.hapi.client.HapiClient;
+import com.libraryproject.mapper.BookCopyMapper;
 import com.libraryproject.mapper.BookMapper;
 import com.libraryproject.service.BookDbService;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -18,13 +22,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BooksController {
 
+    HapiClient hapiClient;
     BookMapper bookMapper;
+    BookCopyMapper bookCopyMapper;
     BookDbService dbService;
 
     @Autowired
-    public BooksController(BookMapper bookMapper, BookDbService dbService) {
+    public BooksController(BookMapper bookMapper, BookDbService dbService, BookCopyMapper bookCopyMapper, HapiClient hapiClient) {
         this.bookMapper = bookMapper;
         this.dbService = dbService;
+        this.bookCopyMapper = bookCopyMapper;
+        this.hapiClient = hapiClient;
     }
 
     @GetMapping
@@ -33,8 +41,17 @@ public class BooksController {
         return ResponseEntity.ok(books);
     }
     @GetMapping(value = "{bookId}")
-    public ResponseEntity<BookDto> getBook(@PathVariable Long bookId){
-        return ResponseEntity.ok(new BookDto(1L,"test","test",2002, 1));
+    public ResponseEntity<DetailedBookDto> getBook(@PathVariable Long bookId) throws IOException, InterruptedException {
+        BookDto book = bookMapper.mapToBookDto(dbService.getBook(bookId));
+        DetailedBookDto detailedBook = DetailedBookDto.builder()
+                .bookId(book.getId())
+                .title(book.getTitle())
+                .author(book.getAuthor())
+                .releaseYear(book.getReleaseYear())
+                .numberOfAvailableCopies(book.getNumberOfAvailableCopies())
+                .synopsis(hapiClient.getBookDescription(book.getTitle()))
+                .build();
+        return ResponseEntity.ok(detailedBook);
     }
     @GetMapping("/top-month")
     public ResponseEntity<List<BookDto>> getTopBooks(){
@@ -45,8 +62,7 @@ public class BooksController {
 
     @GetMapping(value = "/copies/{bookId}")
     public ResponseEntity<List<BookCopyDto>> getListOfCopies(@PathVariable Long bookId){
-        List<BookCopyDto> bookCopies = List.of(new BookCopyDto(1L, 1L, "Rented"),
-                new BookCopyDto(2L, 1L, "Available"));
+        List<BookCopyDto> bookCopies = bookCopyMapper.mapToBookCopyDtoList(dbService.getBookCopies(bookId));
         return ResponseEntity.ok(bookCopies);
     }
 

@@ -1,16 +1,15 @@
 package com.libraryproject.domain.dto;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
+@Builder
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class BookDto {
-    private Long id;
+public class DetailedBookDto {
+    private Long bookId;
     private String title;
     private String author;
     private int releaseYear;
     private int numberOfAvailableCopies;
+    private String synopsis;
 }
