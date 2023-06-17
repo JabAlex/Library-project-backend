@@ -2,7 +2,10 @@ package com.libraryproject.controller;
 
 import com.libraryproject.domain.dto.BookCopyDto;
 import com.libraryproject.domain.dto.BookDto;
+import com.libraryproject.mapper.BookMapper;
+import com.libraryproject.service.BookDbService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +18,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BooksController {
 
+    BookMapper bookMapper;
+    BookDbService dbService;
+
+    @Autowired
+    public BooksController(BookMapper bookMapper, BookDbService dbService) {
+        this.bookMapper = bookMapper;
+        this.dbService = dbService;
+    }
+
     @GetMapping
     public ResponseEntity<List<BookDto>> getBooks(){
-        List<BookDto> books = List.of(new BookDto(2L, "test", "test", 1998, 2),
-                new BookDto(1L, "test2", "test2", 2020, 3));
+        List<BookDto> books = bookMapper.mapToBookDtoList(dbService.getAllBooks());
         return ResponseEntity.ok(books);
     }
     @GetMapping(value = "{bookId}")
