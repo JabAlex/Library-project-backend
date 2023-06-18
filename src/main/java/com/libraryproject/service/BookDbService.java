@@ -26,4 +26,26 @@ public class BookDbService {
     public List<BookCopy> getBookCopies(Long bookId){
         return bookCopyRepository.findBookCopiesByBookId(bookId);
     }
+
+    public void addBook(Book book){
+        bookRepository.save(book);
+    }
+    public void addBookCopy(Long bookId){
+        Book book = bookRepository.findById(bookId).orElse(null);
+        BookCopy bookCopy = new BookCopy(null,
+                book,
+                "Available");
+        bookCopyRepository.save(bookCopy);
+    }
+    public void rentBookCopy(Long bookCopyId){
+        BookCopy bookCopy = bookCopyRepository.findById(bookCopyId).orElse(null);
+        bookCopy.setStatus("Rented");
+        bookCopyRepository.save(bookCopy);
+    }
+    public void deleteBook(Long bookId){
+        bookRepository.deleteById(bookId);
+    }
+    public void deleteBookCopy(Long bookCopyId){
+        bookCopyRepository.deleteById(bookCopyId);
+    }
 }

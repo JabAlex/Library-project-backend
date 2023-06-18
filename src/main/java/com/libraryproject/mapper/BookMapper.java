@@ -4,6 +4,7 @@ import com.libraryproject.domain.Book;
 import com.libraryproject.domain.dto.BookDto;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,5 +22,14 @@ public class BookMapper {
         return bookList.stream()
                 .map(this::mapToBookDto)
                 .toList();
+    }
+    public Book mapToBook(BookDto bookDto){
+        return new Book(
+                bookDto.getId(),
+                bookDto.getTitle(),
+                bookDto.getAuthor(),
+                bookDto.getReleaseYear(),
+                new ArrayList<>()
+        );
     }
 }

@@ -1,5 +1,6 @@
 package com.libraryproject.controller;
 
+import com.libraryproject.domain.Book;
 import com.libraryproject.domain.dto.BookCopyDto;
 import com.libraryproject.domain.dto.BookDto;
 import com.libraryproject.domain.dto.DetailedBookDto;
@@ -67,16 +68,19 @@ public class BooksController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BookDto> addBook(@RequestBody BookDto bookDto){
-        return ResponseEntity.ok(bookDto);
+    public ResponseEntity<Void> addBook(@RequestBody BookDto bookDto){
+        dbService.addBook(bookMapper.mapToBook(bookDto));
+        return ResponseEntity.ok().build();
     }
     @PostMapping(value = "/copies/add/{bookId}")
-    public ResponseEntity<String> addBookCopy(@PathVariable Long bookId){
-        return ResponseEntity.ok("copy added");
+    public ResponseEntity<Void> addBookCopy(@PathVariable Long bookId){
+        dbService.addBookCopy(bookId);
+        return ResponseEntity.ok().build();
     }
-    @PostMapping(value = "/copies/rent/{bookCopyId}")
-    public ResponseEntity<String> rentBookCopy(@PathVariable Long bookCopyId){
-        return ResponseEntity.ok("copy rented");
+    @PutMapping(value = "/copies/rent/{bookCopyId}")
+    public ResponseEntity<Void> rentBookCopy(@PathVariable Long bookCopyId){
+        dbService.rentBookCopy(bookCopyId);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -86,10 +90,12 @@ public class BooksController {
 
     @DeleteMapping(value = "{bookId}")
     public ResponseEntity<Void> deleteBook(@PathVariable Long bookId){
+        dbService.deleteBook(bookId);
         return ResponseEntity.ok().build();
     }
     @DeleteMapping(value = "/copies/{bookCopyId}")
     public ResponseEntity<Void> deleteBookCopy(@PathVariable Long bookCopyId){
+        dbService.deleteBookCopy(bookCopyId);
         return ResponseEntity.ok().build();
     }
 }

@@ -4,20 +4,18 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "BOOK_COPIES")
-public class BookCopy {
+@Entity(name = "MOVIE_COPIES")
+public class MovieCopy {
     @Id
     @GeneratedValue
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "BOOK_ID")
-    private Book book;
+    @JoinColumn(name = "MOVIE_ID")
+    private Movie movie;
     @Column(name = "STATUS")
     private String status;
 }
