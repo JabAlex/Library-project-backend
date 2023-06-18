@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MovieDto {
-    private Long movieId;
+    private Long id;
     private String title;
     private String director;
     private int releaseYear;

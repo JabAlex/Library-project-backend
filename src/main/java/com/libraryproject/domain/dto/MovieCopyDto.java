@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MovieCopyDto {
-    private Long movieCopyId;
+    private Long id;
     private Long movieId;
     private String status;
 }

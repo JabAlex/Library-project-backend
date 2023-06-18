@@ -25,7 +25,7 @@ public class MovieMapper {
                 .collect(Collectors.toList());
     }
     public Movie mapToMovie(MovieDto movieDto){
-        return new Movie(movieDto.getMovieId(),
+        return new Movie(movieDto.getId(),
                 movieDto.getTitle(),
                 movieDto.getDirector(),
                 movieDto.getReleaseYear(),

@@ -1,8 +1,13 @@
 package com.libraryproject.controller;
 
+import com.libraryproject.domain.Movie;
 import com.libraryproject.domain.dto.MovieCopyDto;
 import com.libraryproject.domain.dto.MovieDto;
+import com.libraryproject.mapper.MovieCopyMapper;
+import com.libraryproject.mapper.MovieMapper;
+import com.libraryproject.service.MovieDbService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,15 +20,27 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MoviesController {
 
+    MovieMapper movieMapper;
+    MovieCopyMapper movieCopyMapper;
+    MovieDbService dbService;
+
+    @Autowired
+    public MoviesController(MovieMapper movieMapper, MovieDbService dbService, MovieCopyMapper movieCopyMapper) {
+        this.movieMapper = movieMapper;
+        this.dbService = dbService;
+        this.movieCopyMapper = movieCopyMapper;
+    }
+
+
     @GetMapping
     public ResponseEntity<List<MovieDto>> getMovies(){
-        List<MovieDto> movies = List.of(new MovieDto(1L, "test", "test", 2022, 2),
-                new MovieDto(2L, "test2", "tetst", 2012, 3));
+        List<MovieDto> movies = movieMapper.mapToMovieDtoList(dbService.getAllMovies());
         return ResponseEntity.ok(movies);
     }
     @GetMapping(value = "{movieId}")
     public ResponseEntity<MovieDto> getMovie(@PathVariable Long movieId){
-        return ResponseEntity.ok(new MovieDto(1L, "test", "test", 2020, 1));
+        MovieDto movieDto = movieMapper.mapToMovieDto(dbService.getMovie(movieId));
+        return ResponseEntity.ok(movieDto);
     }
     @GetMapping("/top-month")
     public ResponseEntity<List<MovieDto>> getTopMovies(){
@@ -33,35 +50,44 @@ public class MoviesController {
     }
     @GetMapping(value = "/copies/{movieId}")
     public ResponseEntity<List<MovieCopyDto>> getListOfCopies(@PathVariable Long movieId){
-        List<MovieCopyDto> movieCopies = List.of(new MovieCopyDto(1L, 1L, "Available"),
-                new MovieCopyDto(2L, 1L, "Rented"));
+        List<MovieCopyDto> movieCopies = movieCopyMapper.mapToMovieCopyDtoList(dbService.getMovieCopies(movieId));
         return ResponseEntity.ok(movieCopies);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<MovieDto> addMovie(@RequestBody MovieDto movieDto){
-        return ResponseEntity.ok(movieDto);
+    public ResponseEntity<Void> addMovie(@RequestBody MovieDto movieDto){
+        dbService.saveMovie(movieMapper.mapToMovie(movieDto));
+        return ResponseEntity.ok().build();
     }
     @PostMapping(value = "/copies/add/{movieId}")
-    public ResponseEntity<String> addMovieCopy(@PathVariable Long movieId){
-        return ResponseEntity.ok("copy added");
+    public ResponseEntity<Void> addMovieCopy(@PathVariable Long movieId){
+        dbService.addMovieCopy(movieId);
+        return ResponseEntity.ok().build();
     }
-    @PostMapping(value = "/copies/rent/{movieCopyId}")
-    public ResponseEntity<String> rentMovieCopy(@PathVariable Long movieCopyId){
-        return ResponseEntity.ok("copy rented");
+    @PutMapping(value = "/copies/rent/{movieCopyId}")
+    public ResponseEntity<Void> rentMovieCopy(@PathVariable Long movieCopyId){
+        dbService.rentMovieCopy(movieCopyId);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<MovieDto> editMovie(@RequestBody MovieDto movieDto){
-        return ResponseEntity.ok(movieDto);
+    public ResponseEntity<Void> editMovie(@RequestBody MovieDto movieDto){
+        Movie movie = dbService.getMovie(movieDto.getId());
+        movie.setDirector(movieDto.getDirector());
+        movie.setTitle(movieDto.getTitle());
+        movie.setReleaseYear(movieDto.getReleaseYear());
+        dbService.saveMovie(movie);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(value = "{movieId}")
     public ResponseEntity<Void> deleteMovie(@PathVariable Long movieId){
+        dbService.deleteMovie(movieId);
         return ResponseEntity.ok().build();
     }
     @DeleteMapping(value = "/copies/{movieCopyId}")
     public ResponseEntity<Void> deleteMovieCopy(@PathVariable Long movieCopyId){
+        dbService.deleteMovieCopy(movieCopyId);
         return ResponseEntity.ok().build();
     }
 }

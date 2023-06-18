@@ -45,7 +45,7 @@ public class BooksController {
     public ResponseEntity<DetailedBookDto> getBook(@PathVariable Long bookId) throws IOException, InterruptedException {
         BookDto book = bookMapper.mapToBookDto(dbService.getBook(bookId));
         DetailedBookDto detailedBook = DetailedBookDto.builder()
-                .bookId(book.getId())
+                .id(book.getId())
                 .title(book.getTitle())
                 .author(book.getAuthor())
                 .releaseYear(book.getPublicationYear())

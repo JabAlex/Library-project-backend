@@ -6,7 +6,7 @@ import lombok.Data;
 @Builder
 @Data
 public class DetailedBookDto {
-    private Long bookId;
+    private Long id;
     private String title;
     private String author;
     private int releaseYear;
