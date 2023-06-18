@@ -1,7 +1,7 @@
 package com.libraryproject.controller;
 
 import com.libraryproject.domain.dto.ArticleDto;
-import com.libraryproject.domain.dto.UserDto;
+import com.libraryproject.domain.dto.ProfileDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,8 +33,8 @@ public class LibraryController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/user/{userID}")
-    public ResponseEntity<UserDto> getUserInfo(@PathVariable Long userID){
-        return ResponseEntity.ok(new UserDto(1L, "test"));
+    @GetMapping(value = "/profile/{profileID}")
+    public ResponseEntity<ProfileDto> getProfileInfo(@PathVariable Long profileID){
+        return ResponseEntity.ok(new ProfileDto());
     }
 }

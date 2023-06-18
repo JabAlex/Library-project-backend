@@ -48,7 +48,7 @@ public class BooksController {
                 .bookId(book.getId())
                 .title(book.getTitle())
                 .author(book.getAuthor())
-                .releaseYear(book.getReleaseYear())
+                .releaseYear(book.getPublicationYear())
                 .numberOfAvailableCopies(book.getNumberOfAvailableCopies())
                 .synopsis(hapiClient.getBookDescription(book.getTitle()))
                 .build();
@@ -69,7 +69,7 @@ public class BooksController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> addBook(@RequestBody BookDto bookDto){
-        dbService.addBook(bookMapper.mapToBook(bookDto));
+        dbService.saveBook(bookMapper.mapToBook(bookDto));
         return ResponseEntity.ok().build();
     }
     @PostMapping(value = "/copies/add/{bookId}")
@@ -84,8 +84,13 @@ public class BooksController {
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BookDto> editBook(@RequestBody BookDto bookDto){
-        return ResponseEntity.ok(bookDto);
+    public ResponseEntity<Void> editBook(@RequestBody BookDto bookDto){
+        Book book = dbService.getBook(bookDto.getId());
+        book.setAuthor(bookDto.getAuthor());
+        book.setTitle(bookDto.getTitle());
+        book.setPublicationYear(bookDto.getPublicationYear());
+        dbService.saveBook(book);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(value = "{bookId}")

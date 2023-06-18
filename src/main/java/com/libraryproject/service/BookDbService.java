@@ -2,8 +2,6 @@ package com.libraryproject.service;
 
 import com.libraryproject.domain.Book;
 import com.libraryproject.domain.BookCopy;
-import com.libraryproject.domain.dto.BookCopyDto;
-import com.libraryproject.domain.dto.BookDto;
 import com.libraryproject.domain.repository.BookCopyRepository;
 import com.libraryproject.domain.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +25,7 @@ public class BookDbService {
         return bookCopyRepository.findBookCopiesByBookId(bookId);
     }
 
-    public void addBook(Book book){
+    public void saveBook(Book book){
         bookRepository.save(book);
     }
     public void addBookCopy(Long bookId){
@@ -37,15 +35,16 @@ public class BookDbService {
                 "Available");
         bookCopyRepository.save(bookCopy);
     }
-    public void rentBookCopy(Long bookCopyId){
-        BookCopy bookCopy = bookCopyRepository.findById(bookCopyId).orElse(null);
-        bookCopy.setStatus("Rented");
-        bookCopyRepository.save(bookCopy);
-    }
+
     public void deleteBook(Long bookId){
         bookRepository.deleteById(bookId);
     }
     public void deleteBookCopy(Long bookCopyId){
         bookCopyRepository.deleteById(bookCopyId);
+    }
+    public void rentBookCopy(Long bookCopyId){
+        BookCopy bookCopy = bookCopyRepository.findById(bookCopyId).orElse(null);
+        bookCopy.setStatus("Rented");
+        bookCopyRepository.save(bookCopy);
     }
 }

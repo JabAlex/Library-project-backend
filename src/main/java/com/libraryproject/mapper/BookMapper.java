@@ -28,7 +28,7 @@ public class BookMapper {
                 bookDto.getId(),
                 bookDto.getTitle(),
                 bookDto.getAuthor(),
-                bookDto.getReleaseYear(),
+                bookDto.getPublicationYear(),
                 new ArrayList<>()
         );
     }
