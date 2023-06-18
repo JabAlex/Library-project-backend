@@ -1,6 +1,8 @@
 package com.libraryproject.controller;
 
 import com.libraryproject.domain.Movie;
+import com.libraryproject.domain.dto.DetailedBookDto;
+import com.libraryproject.domain.dto.DetailedMovieDto;
 import com.libraryproject.domain.dto.MovieCopyDto;
 import com.libraryproject.domain.dto.MovieDto;
 import com.libraryproject.mapper.MovieCopyMapper;
@@ -38,9 +40,17 @@ public class MoviesController {
         return ResponseEntity.ok(movies);
     }
     @GetMapping(value = "{movieId}")
-    public ResponseEntity<MovieDto> getMovie(@PathVariable Long movieId){
+    public ResponseEntity<DetailedMovieDto> getMovie(@PathVariable Long movieId){
         MovieDto movieDto = movieMapper.mapToMovieDto(dbService.getMovie(movieId));
-        return ResponseEntity.ok(movieDto);
+        DetailedMovieDto detailedMovieDto = DetailedMovieDto.builder()
+                .id(movieDto.getId())
+                .title(movieDto.getTitle())
+                .director(movieDto.getDirector())
+                .releaseYear(movieDto.getReleaseYear())
+                .numberOfAvailableCopies(movieDto.getNumberOfAvailableCopies())
+                .synopsis(" test ")
+                .build();
+        return ResponseEntity.ok(detailedMovieDto);
     }
     @GetMapping("/top-month")
     public ResponseEntity<List<MovieDto>> getTopMovies(){
