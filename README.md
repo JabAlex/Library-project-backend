@@ -8,10 +8,12 @@ Still to do:
 - implement renting books and movies
 - implement news articles
 - implement a scheduler for top monthly rented books and movies lists
+- add tests
 
 ### How to set up:
 - create a local mySql database schema named: library_project
 - create database user with credentials:
   - username: library_admin
   - password: admin
+- run DatabaseSetUpWithExampleData.sql
 - clone and build the backend and frontend side of application
