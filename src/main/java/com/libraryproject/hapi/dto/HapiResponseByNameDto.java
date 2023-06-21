@@ -1,4 +1,4 @@
-package com.libraryproject.domain.dto;
+package com.libraryproject.hapi.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,17 +6,17 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class HapiResponseByIdDto {
+@AllArgsConstructor
+public class HapiResponseByNameDto {
     int book_id;
     String name;
     String cover;
     String url;
     List<String> authors;
     double rating;
-    int pages;
-    String published_date;
+    int year;
     String synopsis;
 }

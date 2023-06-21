@@ -7,6 +7,7 @@ import com.libraryproject.domain.dto.MovieCopyDto;
 import com.libraryproject.domain.dto.MovieDto;
 import com.libraryproject.mapper.MovieCopyMapper;
 import com.libraryproject.mapper.MovieMapper;
+import com.libraryproject.omdb.client.OmdbClient;
 import com.libraryproject.service.MovieDbService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +26,14 @@ public class MoviesController {
     MovieMapper movieMapper;
     MovieCopyMapper movieCopyMapper;
     MovieDbService dbService;
+    OmdbClient omdbClient;
 
     @Autowired
-    public MoviesController(MovieMapper movieMapper, MovieDbService dbService, MovieCopyMapper movieCopyMapper) {
+    public MoviesController(MovieMapper movieMapper, MovieDbService dbService, MovieCopyMapper movieCopyMapper, OmdbClient omdbClient) {
         this.movieMapper = movieMapper;
         this.dbService = dbService;
         this.movieCopyMapper = movieCopyMapper;
+        this.omdbClient = omdbClient;
     }
 
 
@@ -48,7 +51,7 @@ public class MoviesController {
                 .director(movieDto.getDirector())
                 .releaseYear(movieDto.getReleaseYear())
                 .numberOfAvailableCopies(movieDto.getNumberOfAvailableCopies())
-                .synopsis(" test ")
+                .synopsis(omdbClient.getMovieDescription(movieDto.getTitle()))
                 .build();
         return ResponseEntity.ok(detailedMovieDto);
     }

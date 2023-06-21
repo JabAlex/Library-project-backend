@@ -2,8 +2,8 @@ package com.libraryproject.hapi.client;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.libraryproject.domain.dto.HapiResponseByIdDto;
-import com.libraryproject.domain.dto.HapiResponseByNameDto;
+import com.libraryproject.hapi.dto.HapiResponseByIdDto;
+import com.libraryproject.hapi.dto.HapiResponseByNameDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
