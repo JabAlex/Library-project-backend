@@ -1,7 +1,6 @@
 package com.libraryproject.controller;
 
 import com.libraryproject.domain.Movie;
-import com.libraryproject.domain.dto.DetailedBookDto;
 import com.libraryproject.domain.dto.DetailedMovieDto;
 import com.libraryproject.domain.dto.MovieCopyDto;
 import com.libraryproject.domain.dto.MovieDto;
